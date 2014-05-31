@@ -19,4 +19,10 @@ class nginx {
         proto  => tcp,
         action => accept,
     }
+    
+    file { "/etc/nginx/nginx.conf":
+        source => "puppet:///modules/nginx/nginx.conf",
+        ensure => file,
+        notify => Service["nginx"]
+    }
 }
