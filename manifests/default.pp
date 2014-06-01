@@ -17,4 +17,4 @@ Firewall {
 class { ['my_fw::pre', 'my_fw::post']: }
 class { 'firewall': }
 
-class {"symfony": require => Class["utils", "nginx", "php-fpm", "php-composer", "postgresql"]}
+class {"symfony": require => Class["utils", "nginx", "php-fpm", "php-composer", "my_postgresql"]}
