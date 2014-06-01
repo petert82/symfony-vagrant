@@ -5,32 +5,33 @@ class my_postgresql {
         enabled => 1,
         gpgcheck => 0,
     }
-    package { "postgresql93-server": ensure => installed, require => Yumrepo["pgdg93"] }
-    
-    exec { "create-user":
-        command => "/bin/su postgres -c '/usr/pgsql-9.3/bin/createuser --superuser deploy' || true",
-    }
-      
+    package { "postgresql93-server": 
+        ensure => installed, 
+        require => Yumrepo["pgdg93"],
+        before  => Class['postgresql::server']
+    }->
+    # This is here because I could not get 'initdb_path' in the globals class to work
     exec { "init-db":
         command => "/sbin/service postgresql-9.3 initdb",
         require => Package["postgresql93-server"],
         unless => "/bin/su postgres -c '/usr/pgsql-9.3/bin/pg_ctl status -D /var/lib/pgsql/9.3/data'",
-    }
-    
-    Service["postgresql-9.3"] {
-        start   => "/sbin/service postgresql-9.3 start",
-        status  => "/sbin/service postgresql-9.3 status",
-        stop    => "/sbin/service postgresql-9.3 stop",
-        restart => "/sbin/service postgresql-9.3 restart",
-    }
-      
-    service { "postgresql-9.3":
-        ensure => running,
-        require => [Exec["create-user"], Exec["init-db"]],
-    }
-    
-    user { "postgres":
-        ensure => present,
-        require => Package["postgresql93-server"],
+    }->
+    # https://forge.puppetlabs.com/puppetlabs/postgresql
+    class { 'postgresql::globals':
+        encoding => 'UTF8',
+        locale   => 'en_US.UTF-8',
+        service_name => "postgresql-9.3",
+        createdb_path => "/usr/bin/createuser",
+        psql_path => "/usr/bin/psql",
+        needs_initdb => false,
+    }->
+    class { 'postgresql::server':
+        locale                  => 'en_US.UTF-8',
+        ipv4acls                => ['local all all md5'],
+    }->
+    postgresql::server::role { 'vagrant':
+      createdb      => true,
+      login         => true,
+      password_hash => postgresql_password("vagrant", "vagrant"),
     }
 }

@@ -4,7 +4,7 @@ class {"utils": require => Class["epel"]}
 class {"nginx": require => Class["epel"]}
 class {"php-fpm": require => Class["epel"]}
 class {"php-composer": require => Class["php-fpm"]}
-class {"postgresql":}
+class {"my_postgresql": require => Class["epel"]}
 
 # Base firewall setup
 resources { "firewall":
