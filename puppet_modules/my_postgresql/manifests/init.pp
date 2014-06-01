@@ -21,7 +21,7 @@ class my_postgresql {
         encoding => 'UTF8',
         locale   => 'en_US.UTF-8',
         service_name => "postgresql-9.3",
-        createdb_path => "/usr/bin/createuser",
+        createdb_path => "/usr/bin/createdb",
         psql_path => "/usr/bin/psql",
         needs_initdb => false,
     }->
