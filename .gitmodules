@@ -1,3 +1,16 @@
 [submodule "puppet_modules/firewall"]
 	path = puppet_modules/firewall
+    branch = 1.0.x
 	url = https://github.com/puppetlabs/puppetlabs-firewall
+[submodule "puppet_modules/postgresql"]
+	path = puppet_modules/postgresql
+    branch = 3.3.x
+	url = git@github.com:puppetlabs/puppetlabs-postgresql.git
+[submodule "puppet_modules/stdlib"]
+	path = puppet_modules/stdlib
+    branch = 3.2.x
+	url = git@github.com:puppetlabs/puppetlabs-stdlib.git
+[submodule "puppet_modules/concat"]
+	path = puppet_modules/concat
+    branch = 1.0.x
+	url = git@github.com:puppetlabs/puppetlabs-concat.git
