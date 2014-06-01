@@ -5,8 +5,12 @@ class nginx {
     package { "nginx":
         ensure => installed,
         before => Service["nginx"]
-    }
-    
+    }->
+    file { "/etc/nginx/nginx.conf":
+        source => "puppet:///modules/nginx/nginx.conf",
+        ensure => file,
+        notify => Service["nginx"]
+    }~>
     service { "nginx":
         enable => true,
         ensure => running,
@@ -18,11 +22,5 @@ class nginx {
         port   => [80, 443],
         proto  => tcp,
         action => accept,
-    }
-    
-    file { "/etc/nginx/nginx.conf":
-        source => "puppet:///modules/nginx/nginx.conf",
-        ensure => file,
-        notify => Service["nginx"]
     }
 }
