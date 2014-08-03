@@ -26,6 +26,10 @@ class php-fpm {
         ensure => file,
         notify => Service["php-fpm"]
     }->
+    file { "/var/lib/php/session":
+        ensure => directory,
+        owner => "vagrant"
+    }->
     service { "php-fpm":
         enable => true,
         ensure => running,
